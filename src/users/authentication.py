@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import Optional, Tuple, Any
 
 # Django imports
 from django.conf import settings
@@ -13,7 +14,7 @@ from .models import User
 
 
 class JWTAuthentication(authentication.BaseAuthentication):
-    def authenticate(self, request):
+    def authenticate(self, request) -> Optional[Tuple[User, dict]]:
         jwt_token = request.META.get('HTTP_AUTHORIZATION')
         if jwt_token is None:
             return None
@@ -42,7 +43,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
         return user, payload
 
     @classmethod
-    def create_access(cls, user):
+    def create_access(cls, user) -> str:
         payload = {
             'user_id': str(user.id),
             'user_email': user.email,
@@ -55,7 +56,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
         return access_token
 
     @classmethod
-    def create_refresh(cls, user):
+    def create_refresh(cls, user: User) -> str:
         payload = {
             'user_id': str(user.id),
             'exp': datetime.utcnow() + timedelta(days=2),
@@ -65,7 +66,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
         return refresh_token
 
     @classmethod
-    def update_access_token(cls, refresh_token: str):
+    def update_access_token(cls, refresh_token: str) -> str:
         try:
             payload = jwt.decode(refresh_token, settings.SECRET_JWT_KEY, algorithms=[settings.ALGORITHM])
             if payload.get('type') != 'refresh':
@@ -89,6 +90,6 @@ class JWTAuthentication(authentication.BaseAuthentication):
         return access_token
 
     @classmethod
-    def get_the_token_from_header(cls, token: str):
+    def get_the_token_from_header(cls, token: str) -> str:
         token = token.replace('Bearer', '').replace(' ', '')
         return token

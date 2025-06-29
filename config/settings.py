@@ -155,8 +155,8 @@ REST_FRAMEWORK = {
     ),
 }
 
-SECRET_JWT_KEY = os.getenv('SECRET_JWT_KEY')
-ALGORITHM = os.getenv('ALGORITHM')
+SECRET_JWT_KEY = os.getenv('SECRET_JWT_KEY', 'secret_key1')
+ALGORITHM = os.getenv('ALGORITHM', 'HS256')
 
 CELERY_BROKER_URL = os.getenv('REDIS_URL')
 CELERY_RESULT_BACKEND = os.getenv('REDIS_URL')
