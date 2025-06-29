@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Optional, Tuple, Any
+from typing import Any, Optional, Tuple
 
 # Django imports
 from django.conf import settings
@@ -30,7 +30,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Token has expired')
         except Exception as e:
-            return str(e)
+            raise AuthenticationFailed(f'Authentication failed: {str(e)}')
 
         email = payload.get('user_email')
         if email is None:
