@@ -235,6 +235,7 @@ DB_NAME=your-db-name
 REDIS_URL=your-redis-url
 EMAIL_HOST_USER=your-email
 EMAIL_HOST_PASSWORD=your-email-password
+REDIS_URL=redis://redis:6379/0
 ```
 
 2. **Static Files**
